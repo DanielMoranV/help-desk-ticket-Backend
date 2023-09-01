@@ -1,0 +1,166 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId Int     @id @default(autoincrement()) @map(name: "user_id")
+  dni    String  @unique @map(name: "dni")
+  name   String  @map(name: "name")
+  phone  String? @map(name: "phone")
+  email  String? @map(name: "email")
+  photo  String? @map(name: "photo")
+
+  access          Access[]
+  Ticket          Ticket[]
+  TicketComment   TicketComment[]
+  Message         Message[]
+  RoomParticipant RoomParticipant[]
+
+  @@map(name: "user")
+}
+
+model Access {
+  accessId     Int       @id @default(autoincrement()) @map(name: "access_id")
+  userId       Int       @map(name: "user_id")
+  username     String    @unique @map(name: "username")
+  password     String    @map(name: "password")
+  status       String?   @default("offline")
+  active       Boolean?
+  user         User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  lastSession  DateTime? @default(now()) @map("last_session")
+  createAt     DateTime  @default(now()) @map("create_at")
+  temporalCode String?   @map("temporal_code")
+  positionId   Int?      @map(name: "position_id")
+  position     Position? @relation(fields: [positionId], references: [positionId])
+  Ticket       Ticket[]
+
+  @@map(name: "access")
+}
+
+model Area {
+  areaId Int    @id @default(autoincrement()) @map(name: "area_id")
+  name   String @unique @map(name: "name")
+
+  position Position[]
+
+  @@map(name: "area")
+}
+
+model Position {
+  positionId Int    @id @default(autoincrement()) @map(name: "position_id")
+  name       String @unique @map(name: "name")
+  areaId     Int    @map(name: "area_id")
+  Area       Area?  @relation(fields: [areaId], references: [areaId])
+
+  access Access[]
+
+  @@map(name: "position")
+}
+
+model Ticket {
+  ticketId    Int       @id @default(autoincrement()) @map(name: "ticket_id")
+  userId      Int       @map(name: "user_id")
+  agentId     Int?      @map(name: "agent_id")
+  categoryId  Int       @map(name: "category_id")
+  priorityId  Int       @map(name: "priority_id")
+  subject     String    @map(name: "subject")
+  description String    @map(name: "description")
+  status      String    @default("Pendiente") @map(name: "status")
+  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  updatedAt   DateTime? @map(name: "updated_at")
+  resolvedAt  DateTime? @map(name: "resolved_at")
+  closedAt    DateTime? @map(name: "closed_at")
+
+  user     User     @relation(fields: [userId], references: [userId])
+  agent    Access?  @relation(fields: [agentId], references: [accessId])
+  category Category @relation(fields: [categoryId], references: [categoryId])
+  priority Priority @relation(fields: [priorityId], references: [priorityId])
+
+  ticketComments TicketComment[]
+  ticketPhoto    TickePhoto[]
+
+  @@map(name: "ticket")
+}
+
+model TickePhoto {
+  photoId  Int    @id @default(autoincrement()) @map(name: "photo_id")
+  ticketId Int    @map(name: "ticket_id")
+  filename String @map(name: "filename")
+
+  ticket Ticket @relation(fields: [ticketId], references: [ticketId])
+
+  @@map(name: "ticket_photo")
+}
+
+model TicketComment {
+  commentId Int      @id @default(autoincrement()) @map(name: "comment_id")
+  ticketId  Int      @map(name: "ticket_id")
+  userId    Int      @map(name: "user_id")
+  content   String   @map(name: "content")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+
+  ticket Ticket @relation(fields: [ticketId], references: [ticketId])
+  user   User   @relation(fields: [userId], references: [userId])
+
+  @@map(name: "ticket_comment")
+}
+
+model Category {
+  categoryId Int    @id @default(autoincrement()) @map(name: "category_id")
+  name       String @unique @map(name: "name")
+
+  tickets Ticket[]
+
+  @@map(name: "category")
+}
+
+model Priority {
+  priorityId Int    @id @default(autoincrement()) @map(name: "priority_id")
+  name       String @unique @map(name: "name")
+
+  tickets Ticket[]
+
+  @@map(name: "priority")
+}
+
+model Room {
+  roomId   Int       @id @default(autoincrement()) @map(name: "room_id")
+  name     String    @map(name: "name")
+  messages Message[]
+
+  participants RoomParticipant[]
+
+  @@map(name: "room")
+}
+
+model Message {
+  messageId Int      @id @default(autoincrement()) @map(name: "message_id")
+  roomId    Int      @map(name: "room_id")
+  senderId  Int      @map(name: "sender_id")
+  content   String   @map(name: "content")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+
+  room   Room @relation(fields: [roomId], references: [roomId])
+  sender User @relation(fields: [senderId], references: [userId])
+
+  @@map(name: "message")
+}
+
+model RoomParticipant {
+  participantId Int @id @default(autoincrement()) @map(name: "participant_id")
+  roomId        Int @map(name: "room_id")
+  userId        Int @map(name: "user_id")
+
+  room Room @relation(fields: [roomId], references: [roomId])
+  user User @relation(fields: [userId], references: [userId])
+
+  @@map(name: "room_participant")
+}
