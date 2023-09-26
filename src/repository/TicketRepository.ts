@@ -4,10 +4,13 @@ import prisma from "../connection/prisma";
 export function getTickets(): Promise<Ticket[]> {
   return prisma.instance.ticket.findMany({
     orderBy: {
-      ticketId: "asc",
+      createdAt: "desc",
     },
     include: {
       ticketPhoto: true,
+      category: true,
+      priority: true,
+      user: true,
     },
   });
 }
@@ -15,10 +18,12 @@ export function getTicketUserId(userId: number): Promise<Ticket[]> {
   return prisma.instance.ticket.findMany({
     where: { userId },
     orderBy: {
-      ticketId: "asc",
+      createdAt: "desc",
     },
     include: {
       ticketPhoto: true,
+      category: true,
+      priority: true,
     },
   });
 }
@@ -29,6 +34,13 @@ export function getTicketId(ticketId: number): Promise<Ticket[]> {
       ticketId: "asc",
     },
     include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+      category: true,
+      priority: true,
       ticketPhoto: true,
     },
   });

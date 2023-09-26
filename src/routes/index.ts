@@ -26,7 +26,7 @@ export async function useRouter(app: Express, api_url: string) {
   router.use("/tickets", verifyToken, ticket);
 
   // Fotos Tickets
-  router.use("/photos", verifyToken, imageRoutes);
+  router.use("/photos", imageRoutes);
 
   app.use(api_url, router);
 }

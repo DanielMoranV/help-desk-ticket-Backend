@@ -11,6 +11,7 @@ import {
   createTicketPhoto,
 } from "../repository/TicketRepository";
 import { success, failure } from "../utils/response";
+import { io } from "../app"; // Importa 'io' desde tu archivo 'app.ts'
 
 // Datos de Categorias
 // --------------------------------
@@ -72,6 +73,10 @@ class TicketHandler {
     const data = req.body;
     try {
       const newTicket = await createTicket(data);
+      // Emitir un evento de Socket.io cuando se crea un nuevo ticket
+      const users = await getTickets();
+      io.emit("newTicket", users);
+      console.log("ticket creado io emitido");
       const message = "Operación exitosa Registro Creado";
       success({ res, data: newTicket, message });
     } catch (error: any) {
@@ -86,9 +91,13 @@ class TicketHandler {
       const ticketId = Number(req.params.ticketId);
       const data = req.body;
       const ticket = await updateTicket(ticketId, data);
+      // Emitir un evento de Socket.io cuando se actualiza un ticket
+      const users = await getTickets();
+      io.emit("updateTicket", users);
       const message = "Operación exitosa Registro Actualizado";
       success({ res, data: ticket, message });
     } catch (error: any) {
+      console.log(error);
       const message = getErrorMessageByCode(error.code);
       failure({ res, message });
     }
@@ -124,6 +133,8 @@ class TicketHandler {
           }
         );
         const ticketPhoto = await createTicketPhoto(uploadedFilesData);
+        const users = await getTickets();
+        io.emit("updateTicket", users);
         const message = "Operación exitosa Registro Actualizado";
         success({ res, data: ticketPhoto, message });
       }
@@ -137,9 +148,12 @@ class TicketHandler {
     try {
       const ticketId = Number(req.params.ticketId);
       const ticket = await deleteTicket(ticketId);
+      const users = await getTickets();
+      io.emit("updateTicket", users);
       const message = "Operación exitosa Registro Eliminado";
       success({ res, data: ticket, message });
     } catch (error: any) {
+      console.log(error);
       const message = getErrorMessageByCode(error.code);
       failure({ res, message });
     }

@@ -95,7 +95,7 @@ model TickePhoto {
   ticketId Int    @map(name: "ticket_id")
   filename String @map(name: "filename")
 
-  ticket Ticket @relation(fields: [ticketId], references: [ticketId])
+  ticket Ticket @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
 
   @@map(name: "ticket_photo")
 }
@@ -107,7 +107,7 @@ model TicketComment {
   content   String   @map(name: "content")
   createdAt DateTime @default(now()) @map(name: "created_at")
 
-  ticket Ticket @relation(fields: [ticketId], references: [ticketId])
+  ticket Ticket @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
   user   User   @relation(fields: [userId], references: [userId])
 
   @@map(name: "ticket_comment")

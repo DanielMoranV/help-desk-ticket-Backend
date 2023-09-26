@@ -36,7 +36,7 @@ function useRouter(app, api_url) {
         // Tickets
         router.use("/tickets", verifyToken_1.default, ticket_1.default);
         // Fotos Tickets
-        router.use("/photos", verifyToken_1.default, imageRoutes_1.default);
+        router.use("/photos", imageRoutes_1.default);
         app.use(api_url, router);
     });
 }

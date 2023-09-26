@@ -13,6 +13,7 @@ const errormessagebycode_1 = require("../midlewares/errormessagebycode");
 const multerupload_1 = require("../midlewares/multerupload");
 const TicketRepository_1 = require("../repository/TicketRepository");
 const response_1 = require("../utils/response");
+const app_1 = require("../app"); // Importa 'io' desde tu archivo 'app.ts'
 // Datos de Categorias
 // --------------------------------
 class TicketHandler {
@@ -83,6 +84,10 @@ class TicketHandler {
             const data = req.body;
             try {
                 const newTicket = yield (0, TicketRepository_1.createTicket)(data);
+                // Emitir un evento de Socket.io cuando se crea un nuevo ticket
+                const users = yield (0, TicketRepository_1.getTickets)();
+                app_1.io.emit("newTicket", users);
+                console.log("ticket creado io emitido");
                 const message = "Operación exitosa Registro Creado";
                 (0, response_1.success)({ res, data: newTicket, message });
             }
@@ -99,10 +104,14 @@ class TicketHandler {
                 const ticketId = Number(req.params.ticketId);
                 const data = req.body;
                 const ticket = yield (0, TicketRepository_1.updateTicket)(ticketId, data);
+                // Emitir un evento de Socket.io cuando se actualiza un ticket
+                const users = yield (0, TicketRepository_1.getTickets)();
+                app_1.io.emit("updateTicket", users);
                 const message = "Operación exitosa Registro Actualizado";
                 (0, response_1.success)({ res, data: ticket, message });
             }
             catch (error) {
+                console.log(error);
                 const message = (0, errormessagebycode_1.getErrorMessageByCode)(error.code);
                 (0, response_1.failure)({ res, message });
             }
@@ -135,6 +144,8 @@ class TicketHandler {
                         };
                     });
                     const ticketPhoto = yield (0, TicketRepository_1.createTicketPhoto)(uploadedFilesData);
+                    const users = yield (0, TicketRepository_1.getTickets)();
+                    app_1.io.emit("updateTicket", users);
                     const message = "Operación exitosa Registro Actualizado";
                     (0, response_1.success)({ res, data: ticketPhoto, message });
                 }
@@ -151,10 +162,13 @@ class TicketHandler {
             try {
                 const ticketId = Number(req.params.ticketId);
                 const ticket = yield (0, TicketRepository_1.deleteTicket)(ticketId);
+                const users = yield (0, TicketRepository_1.getTickets)();
+                app_1.io.emit("updateTicket", users);
                 const message = "Operación exitosa Registro Eliminado";
                 (0, response_1.success)({ res, data: ticket, message });
             }
             catch (error) {
+                console.log(error);
                 const message = (0, errormessagebycode_1.getErrorMessageByCode)(error.code);
                 (0, response_1.failure)({ res, message });
             }

@@ -8,10 +8,13 @@ const prisma_1 = __importDefault(require("../connection/prisma"));
 function getTickets() {
     return prisma_1.default.instance.ticket.findMany({
         orderBy: {
-            ticketId: "asc",
+            createdAt: "desc",
         },
         include: {
             ticketPhoto: true,
+            category: true,
+            priority: true,
+            user: true,
         },
     });
 }
@@ -20,10 +23,12 @@ function getTicketUserId(userId) {
     return prisma_1.default.instance.ticket.findMany({
         where: { userId },
         orderBy: {
-            ticketId: "asc",
+            createdAt: "desc",
         },
         include: {
             ticketPhoto: true,
+            category: true,
+            priority: true,
         },
     });
 }
@@ -35,6 +40,13 @@ function getTicketId(ticketId) {
             ticketId: "asc",
         },
         include: {
+            user: {
+                select: {
+                    name: true,
+                },
+            },
+            category: true,
+            priority: true,
             ticketPhoto: true,
         },
     });

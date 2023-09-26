@@ -21,22 +21,6 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Socket.io
-const server = http.createServer(app);
-const io = new Server(server);
-
-io.on("connection", (socket) => {
-  console.log(`Usuario conectado: ${socket.id}`);
-
-  // Aquí puedes agregar la lógica para manejar el chat en tiempo real
-  socket.on("chat message", (message) => {
-    // Broadcast del mensaje a todos los usuarios
-    io.emit("chat message", message);
-  });
-
-  // Puedes agregar más eventos para manejar datos en tiempo real desde PostgreSQL
-});
-
 // Configurar CORS
 const corsOptions = {
   origin: cli_origin, // Cambiar a la URL permitida para las solicitudes
@@ -44,6 +28,19 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"], // Encabezados permitidos
 };
 app.use(cors(corsOptions));
+
+// Crear un servidor HTTP y configurar Socket.io en él
+const server = http.createServer(app);
+const io = new Server(server, { cors: corsOptions });
+
+io.on("connection", (socket) => {
+  console.log("Usuario conectado a través de Socket app.io");
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+
+  // Aquí puedes agregar lógica para escuchar eventos de Socket.io si es necesario
+});
 
 //Routes
 try {
@@ -54,4 +51,4 @@ try {
   prisma.instance.$disconnect();
 }
 
-export default app;
+export { app, server, io };

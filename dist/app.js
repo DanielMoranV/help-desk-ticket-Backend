@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.io = exports.server = exports.app = void 0;
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const express_1 = __importDefault(require("express"));
@@ -12,6 +13,7 @@ const prisma_1 = __importDefault(require("./connection/prisma"));
 //Routes
 const routes_1 = require("./routes");
 const app = (0, express_1.default)();
+exports.app = app;
 const api_url = process.env.API;
 const cli_origin = process.env.CLIURL;
 //Settings
@@ -21,18 +23,6 @@ app.set("json spaces", 2);
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
-// Socket.io
-const server = http_1.default.createServer(app);
-const io = new socket_io_1.Server(server);
-io.on("connection", (socket) => {
-    console.log(`Usuario conectado: ${socket.id}`);
-    // Aquí puedes agregar la lógica para manejar el chat en tiempo real
-    socket.on("chat message", (message) => {
-        // Broadcast del mensaje a todos los usuarios
-        io.emit("chat message", message);
-    });
-    // Puedes agregar más eventos para manejar datos en tiempo real desde PostgreSQL
-});
 // Configurar CORS
 const corsOptions = {
     origin: cli_origin,
@@ -40,6 +30,18 @@ const corsOptions = {
     allowedHeaders: ["Content-Type", "Authorization"], // Encabezados permitidos
 };
 app.use((0, cors_1.default)(corsOptions));
+// Crear un servidor HTTP y configurar Socket.io en él
+const server = http_1.default.createServer(app);
+exports.server = server;
+const io = new socket_io_1.Server(server, { cors: corsOptions });
+exports.io = io;
+io.on("connection", (socket) => {
+    console.log("Usuario conectado a través de Socket app.io");
+    socket.on("disconnect", () => {
+        console.log("user disconnected");
+    });
+    // Aquí puedes agregar lógica para escuchar eventos de Socket.io si es necesario
+});
 //Routes
 try {
     (0, routes_1.useRouter)(app, api_url);
@@ -50,4 +52,3 @@ catch (error) {
 finally {
     prisma_1.default.instance.$disconnect();
 }
-exports.default = app;
