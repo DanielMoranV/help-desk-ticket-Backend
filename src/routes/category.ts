@@ -10,6 +10,7 @@ const router = Router();
 // Routes categorys
 router.post("/", verifyToken, categoryHandler.createCategory);
 router.get("/", verifyToken, categoryHandler.getCategory);
+router.get("/billing", verifyToken, categoryHandler.getCategoryBilling);
 router.put("/:categoryId", verifyToken, categoryHandler.updateCategory);
 router.delete("/:categoryId", verifyToken, categoryHandler.deleteCategory);
 

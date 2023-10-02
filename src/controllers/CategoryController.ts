@@ -5,6 +5,7 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
+  getCategoryBilling,
 } from "../repository/CategoryRepository";
 import { success, failure } from "../utils/response";
 
@@ -13,6 +14,21 @@ import { success, failure } from "../utils/response";
 
 class CategoryHandler {
   // Lista de empleados
+  public async getCategoryBilling(_req: Request, res: Response): Promise<void> {
+    try {
+      const users = await getCategoryBilling();
+      if (users.length != 0) {
+        const message = "Operación exitosa Lista de empleados";
+        success({ res, data: users, message });
+      } else {
+        const message = "Operación exitosa sin registros";
+        success({ res, data: users, message });
+      }
+    } catch (error: any) {
+      const message = getErrorMessageByCode(error.code);
+      failure({ res, message });
+    }
+  }
   public async getCategory(_req: Request, res: Response): Promise<void> {
     try {
       const users = await getCategory();

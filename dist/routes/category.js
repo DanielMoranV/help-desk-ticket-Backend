@@ -11,6 +11,7 @@ const router = (0, express_1.Router)();
 // Routes categorys
 router.post("/", verifyToken_1.default, categoryHandler.createCategory);
 router.get("/", verifyToken_1.default, categoryHandler.getCategory);
+router.get("/billing", verifyToken_1.default, categoryHandler.getCategoryBilling);
 router.put("/:categoryId", verifyToken_1.default, categoryHandler.updateCategory);
 router.delete("/:categoryId", verifyToken_1.default, categoryHandler.deleteCategory);
 exports.default = router;

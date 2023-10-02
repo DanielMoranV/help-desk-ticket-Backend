@@ -23,24 +23,26 @@ model User {
   TicketComment   TicketComment[]
   Message         Message[]
   RoomParticipant RoomParticipant[]
+  TicketBilling   TicketBilling[]
 
   @@map(name: "user")
 }
 
 model Access {
-  accessId     Int       @id @default(autoincrement()) @map(name: "access_id")
-  userId       Int       @map(name: "user_id")
-  username     String    @unique @map(name: "username")
-  password     String    @map(name: "password")
-  status       String?   @default("offline")
-  active       Boolean?
-  user         User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  lastSession  DateTime? @default(now()) @map("last_session")
-  createAt     DateTime  @default(now()) @map("create_at")
-  temporalCode String?   @map("temporal_code")
-  positionId   Int?      @map(name: "position_id")
-  position     Position? @relation(fields: [positionId], references: [positionId])
-  Ticket       Ticket[]
+  accessId      Int             @id @default(autoincrement()) @map(name: "access_id")
+  userId        Int             @map(name: "user_id")
+  username      String          @unique @map(name: "username")
+  password      String          @map(name: "password")
+  status        String?         @default("offline")
+  active        Boolean?
+  user          User            @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  lastSession   DateTime?       @default(now()) @map("last_session")
+  createAt      DateTime        @default(now()) @map("create_at")
+  temporalCode  String?         @map("temporal_code")
+  positionId    Int?            @map(name: "position_id")
+  position      Position?       @relation(fields: [positionId], references: [positionId])
+  Ticket        Ticket[]
+  TicketBilling TicketBilling[]
 
   @@map(name: "access")
 }
@@ -90,6 +92,43 @@ model Ticket {
   @@map(name: "ticket")
 }
 
+model TicketBilling {
+  ticketBillingId   Int       @id @default(autoincrement()) @map(name: "ticket_billing_id")
+  userId            Int       @map(name: "user_id")
+  agentId           Int?      @map(name: "agent_id")
+  categoryBillingId Int       @map(name: "category_billing_id")
+  priorityId        Int       @map(name: "priority_id")
+  subject           String    @map(name: "subject")
+  description       String    @map(name: "description")
+  status            String    @default("Pendiente") @map(name: "status")
+  insuredStatus     String?   @map(name: "insured_status")
+  admission         Int?      @map(name: "admission")
+  createdAt         DateTime  @default(now()) @map(name: "created_at")
+  updatedAt         DateTime? @map(name: "updated_at")
+  resolvedAt        DateTime? @map(name: "resolved_at")
+  closedAt          DateTime? @map(name: "closed_at")
+
+  user            User            @relation(fields: [userId], references: [userId])
+  agent           Access?         @relation(fields: [agentId], references: [accessId])
+  categoryBilling CategoryBilling @relation(fields: [categoryBillingId], references: [categoryBillingId])
+  priority        Priority        @relation(fields: [priorityId], references: [priorityId])
+
+  TickePhotoBilling TickePhotoBilling[]
+  ticketComments    TicketComment[]
+
+  @@map(name: "ticket_billing")
+}
+
+model TickePhotoBilling {
+  photoBillingId  Int    @id @default(autoincrement()) @map(name: "photo_billing_id")
+  ticketBillingId Int    @map(name: "ticket_billing_id")
+  filename        String @map(name: "filename")
+
+  ticketBilling TicketBilling @relation(fields: [ticketBillingId], references: [ticketBillingId], onDelete: Cascade)
+
+  @@map(name: "ticket_photo_billing")
+}
+
 model TickePhoto {
   photoId  Int    @id @default(autoincrement()) @map(name: "photo_id")
   ticketId Int    @map(name: "ticket_id")
@@ -101,14 +140,16 @@ model TickePhoto {
 }
 
 model TicketComment {
-  commentId Int      @id @default(autoincrement()) @map(name: "comment_id")
-  ticketId  Int      @map(name: "ticket_id")
-  userId    Int      @map(name: "user_id")
-  content   String   @map(name: "content")
-  createdAt DateTime @default(now()) @map(name: "created_at")
+  commentId       Int      @id @default(autoincrement()) @map(name: "comment_id")
+  ticketId        Int?     @map(name: "ticket_id")
+  ticketBillingId Int?     @map(name: "ticket_billing_id")
+  userId          Int      @map(name: "user_id")
+  content         String   @map(name: "content")
+  createdAt       DateTime @default(now()) @map(name: "created_at")
 
-  ticket Ticket @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
-  user   User   @relation(fields: [userId], references: [userId])
+  ticket        Ticket?        @relation(fields: [ticketId], references: [ticketId], onDelete: Cascade)
+  ticketBilling TicketBilling? @relation(fields: [ticketBillingId], references: [ticketBillingId], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [userId])
 
   @@map(name: "ticket_comment")
 }
@@ -122,11 +163,20 @@ model Category {
   @@map(name: "category")
 }
 
+model CategoryBilling {
+  categoryBillingId Int             @id @default(autoincrement()) @map(name: "category_billing_id")
+  nameBilling       String          @unique @map(name: "name_Billing")
+  TicketBilling     TicketBilling[]
+
+  @@map(name: "category_billing")
+}
+
 model Priority {
   priorityId Int    @id @default(autoincrement()) @map(name: "priority_id")
   name       String @unique @map(name: "name")
 
-  tickets Ticket[]
+  tickets       Ticket[]
+  TicketBilling TicketBilling[]
 
   @@map(name: "priority")
 }

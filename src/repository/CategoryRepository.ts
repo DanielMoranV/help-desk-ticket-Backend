@@ -1,10 +1,17 @@
-import { Category } from "@prisma/client";
+import { Category, CategoryBilling } from "@prisma/client";
 import prisma from "../connection/prisma";
 
 export function getCategory(): Promise<Category[]> {
   return prisma.instance.category.findMany({
     orderBy: {
       categoryId: "asc",
+    },
+  });
+}
+export function getCategoryBilling(): Promise<CategoryBilling[]> {
+  return prisma.instance.categoryBilling.findMany({
+    orderBy: {
+      categoryBillingId: "asc",
     },
   });
 }

@@ -16,6 +16,25 @@ const response_1 = require("../utils/response");
 // --------------------------------
 class CategoryHandler {
     // Lista de empleados
+    getCategoryBilling(_req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const users = yield (0, CategoryRepository_1.getCategoryBilling)();
+                if (users.length != 0) {
+                    const message = "Operación exitosa Lista de empleados";
+                    (0, response_1.success)({ res, data: users, message });
+                }
+                else {
+                    const message = "Operación exitosa sin registros";
+                    (0, response_1.success)({ res, data: users, message });
+                }
+            }
+            catch (error) {
+                const message = (0, errormessagebycode_1.getErrorMessageByCode)(error.code);
+                (0, response_1.failure)({ res, message });
+            }
+        });
+    }
     getCategory(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
