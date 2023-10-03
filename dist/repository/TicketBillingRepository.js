@@ -11,7 +11,7 @@ function getTickets() {
             createdAt: "desc",
         },
         include: {
-            TickePhotoBilling: true,
+            TicketPhotoBilling: true,
             categoryBilling: true,
             priority: true,
             user: true,
@@ -26,7 +26,7 @@ function getTicketUserId(userId) {
             createdAt: "desc",
         },
         include: {
-            TickePhotoBilling: true,
+            TicketPhotoBilling: true,
             categoryBilling: true,
             priority: true,
         },
@@ -47,7 +47,7 @@ function getTicketId(ticketBillingId) {
             },
             categoryBilling: true,
             priority: true,
-            TickePhotoBilling: true,
+            TicketPhotoBilling: true,
         },
     });
 }
@@ -57,7 +57,7 @@ function createTicket(data) {
 }
 exports.createTicket = createTicket;
 function createTicketPhoto(data) {
-    return prisma_1.default.instance.tickePhoto.createMany({ data });
+    return prisma_1.default.instance.ticketPhotoBilling.createMany({ data });
 }
 exports.createTicketPhoto = createTicketPhoto;
 function updateTicket(ticketBillingId, data) {

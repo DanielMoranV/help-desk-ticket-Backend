@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import TicketHandler from "../controllers/TicketController";
+import TicketHandler from "../controllers/TicketBillingController";
 
 const ticketHandler = new TicketHandler();
 
@@ -10,10 +10,10 @@ const router = Router();
 router.post("/", ticketHandler.createTicket);
 router.get("/", ticketHandler.getTickets);
 router.get("/user/:userId", ticketHandler.getTicketUserId);
-router.get("/:ticketId", ticketHandler.getTicketId);
-router.put("/:ticketId", ticketHandler.updateTicket);
-router.post("/:ticketId/photo", ticketHandler.updatePhotoTicket);
-router.delete("/:ticketId", ticketHandler.deleteTicket);
+router.get("/:ticketBillingId", ticketHandler.getTicketId);
+router.put("/:ticketBillingId", ticketHandler.updateTicket);
+router.post("/:ticketBillingId/photo", ticketHandler.updatePhotoTicket);
+router.delete("/:ticketBillingId", ticketHandler.deleteTicket);
 
 export default router;
 //app.use(express.static(path.join(__dirname, 'public')));

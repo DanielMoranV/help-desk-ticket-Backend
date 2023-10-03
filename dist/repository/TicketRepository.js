@@ -57,7 +57,7 @@ function createTicket(data) {
 }
 exports.createTicket = createTicket;
 function createTicketPhoto(data) {
-    return prisma_1.default.instance.tickePhoto.createMany({ data });
+    return prisma_1.default.instance.ticketPhoto.createMany({ data });
 }
 exports.createTicketPhoto = createTicketPhoto;
 function updateTicket(ticketId, data) {

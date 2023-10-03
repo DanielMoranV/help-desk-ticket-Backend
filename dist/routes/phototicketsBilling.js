@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const PhotoTicketsController_1 = __importDefault(require("../controllers/PhotoTicketsController"));
+const PhotoTicketsBillingController_1 = __importDefault(require("../controllers/PhotoTicketsBillingController"));
 const verifyToken_1 = __importDefault(require("../midlewares/verifyToken"));
-const photoTicketsHandler = new PhotoTicketsController_1.default();
+const photoTicketsHandler = new PhotoTicketsBillingController_1.default();
 const router = (0, express_1.Router)();
 // Routes photoTicketss
 router.post("/", verifyToken_1.default, photoTicketsHandler.updatePhotoTickets);

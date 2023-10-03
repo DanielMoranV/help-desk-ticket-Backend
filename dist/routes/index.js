@@ -21,6 +21,7 @@ const category_1 = __importDefault(require("./category"));
 const priority_1 = __importDefault(require("./priority"));
 const ticket_1 = __importDefault(require("./ticket"));
 const ticketBilling_1 = __importDefault(require("./ticketBilling"));
+const imageBillingRoutes_1 = __importDefault(require("./imageBillingRoutes"));
 const imageRoutes_1 = __importDefault(require("./imageRoutes"));
 function useRouter(app, api_url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -40,6 +41,8 @@ function useRouter(app, api_url) {
         router.use("/ticketsBilling", verifyToken_1.default, ticketBilling_1.default);
         // Fotos Tickets
         router.use("/photos", imageRoutes_1.default);
+        // Fotos Tickets
+        router.use("/photosBilling", imageBillingRoutes_1.default);
         app.use(api_url, router);
     });
 }

@@ -4,16 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const TicketController_1 = __importDefault(require("../controllers/TicketController"));
-const ticketHandler = new TicketController_1.default();
+const TicketBillingController_1 = __importDefault(require("../controllers/TicketBillingController"));
+const ticketHandler = new TicketBillingController_1.default();
 const router = (0, express_1.Router)();
 // Routes tickets
 router.post("/", ticketHandler.createTicket);
 router.get("/", ticketHandler.getTickets);
 router.get("/user/:userId", ticketHandler.getTicketUserId);
-router.get("/:ticketId", ticketHandler.getTicketId);
-router.put("/:ticketId", ticketHandler.updateTicket);
-router.post("/:ticketId/photo", ticketHandler.updatePhotoTicket);
-router.delete("/:ticketId", ticketHandler.deleteTicket);
+router.get("/:ticketBillingId", ticketHandler.getTicketId);
+router.put("/:ticketBillingId", ticketHandler.updateTicket);
+router.post("/:ticketBillingId/photo", ticketHandler.updatePhotoTicket);
+router.delete("/:ticketBillingId", ticketHandler.deleteTicket);
 exports.default = router;
 //app.use(express.static(path.join(__dirname, 'public')));

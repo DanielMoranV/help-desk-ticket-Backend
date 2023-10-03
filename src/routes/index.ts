@@ -7,6 +7,7 @@ import category from "./category";
 import priority from "./priority";
 import ticket from "./ticket";
 import ticketBilling from "./ticketBilling";
+import imageRoutesBilling from "./imageBillingRoutes";
 import imageRoutes from "./imageRoutes";
 
 export async function useRouter(app: Express, api_url: string) {
@@ -31,6 +32,9 @@ export async function useRouter(app: Express, api_url: string) {
 
   // Fotos Tickets
   router.use("/photos", imageRoutes);
+
+  // Fotos Tickets
+  router.use("/photosBilling", imageRoutesBilling);
 
   app.use(api_url, router);
 }

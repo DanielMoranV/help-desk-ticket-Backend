@@ -87,7 +87,7 @@ model Ticket {
   priority Priority @relation(fields: [priorityId], references: [priorityId])
 
   ticketComments TicketComment[]
-  ticketPhoto    TickePhoto[]
+  ticketPhoto    TicketPhoto[]
 
   @@map(name: "ticket")
 }
@@ -113,13 +113,13 @@ model TicketBilling {
   categoryBilling CategoryBilling @relation(fields: [categoryBillingId], references: [categoryBillingId])
   priority        Priority        @relation(fields: [priorityId], references: [priorityId])
 
-  TickePhotoBilling TickePhotoBilling[]
-  ticketComments    TicketComment[]
+  TicketPhotoBilling TicketPhotoBilling[]
+  ticketComments     TicketComment[]
 
   @@map(name: "ticket_billing")
 }
 
-model TickePhotoBilling {
+model TicketPhotoBilling {
   photoBillingId  Int    @id @default(autoincrement()) @map(name: "photo_billing_id")
   ticketBillingId Int    @map(name: "ticket_billing_id")
   filename        String @map(name: "filename")
@@ -129,7 +129,7 @@ model TickePhotoBilling {
   @@map(name: "ticket_photo_billing")
 }
 
-model TickePhoto {
+model TicketPhoto {
   photoId  Int    @id @default(autoincrement()) @map(name: "photo_id")
   ticketId Int    @map(name: "ticket_id")
   filename String @map(name: "filename")

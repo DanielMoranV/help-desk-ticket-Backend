@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import PhotoTicketsHandler from "../controllers/PhotoTicketsController";
+import PhotoTicketsHandler from "../controllers/PhotoTicketsBillingController";
 import verifyToken from "../midlewares/verifyToken";
 
 const photoTicketsHandler = new PhotoTicketsHandler();

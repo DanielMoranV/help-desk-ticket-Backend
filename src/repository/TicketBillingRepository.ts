@@ -1,4 +1,4 @@
-import { TicketBilling, TickePhoto } from "@prisma/client";
+import { TicketBilling } from "@prisma/client";
 import prisma from "../connection/prisma";
 export function getTickets(): Promise<TicketBilling[]> {
   return prisma.instance.ticketBilling.findMany({
@@ -6,7 +6,7 @@ export function getTickets(): Promise<TicketBilling[]> {
       createdAt: "desc",
     },
     include: {
-      TickePhotoBilling: true,
+      TicketPhotoBilling: true,
       categoryBilling: true,
       priority: true,
       user: true,
@@ -20,7 +20,7 @@ export function getTicketUserId(userId: number): Promise<TicketBilling[]> {
       createdAt: "desc",
     },
     include: {
-      TickePhotoBilling: true,
+      TicketPhotoBilling: true,
       categoryBilling: true,
       priority: true,
     },
@@ -40,7 +40,7 @@ export function getTicketId(ticketBillingId: number): Promise<TicketBilling[]> {
       },
       categoryBilling: true,
       priority: true,
-      TickePhotoBilling: true,
+      TicketPhotoBilling: true,
     },
   });
 }
@@ -49,7 +49,7 @@ export function createTicket(data: TicketBilling): Promise<TicketBilling> {
   return prisma.instance.ticketBilling.create({ data });
 }
 export function createTicketPhoto(data: any) {
-  return prisma.instance.tickePhoto.createMany({ data });
+  return prisma.instance.ticketPhotoBilling.createMany({ data });
 }
 
 export function updateTicket(

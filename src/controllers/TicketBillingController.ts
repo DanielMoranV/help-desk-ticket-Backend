@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { getErrorMessageByCode } from "../midlewares/errormessagebycode";
-import { uploadImage } from "../midlewares/multerupload";
+import { uploadImage } from "../midlewares/multeruploadBilling";
 import {
   getTickets,
   getTicketUserId,
@@ -53,7 +53,7 @@ class TicketHandler {
   }
   public async getTicketId(req: Request, res: Response): Promise<void> {
     try {
-      const ticketId = Number(req.params.ticketId);
+      const ticketId = Number(req.params.ticketBillingId);
       const ticket = await getTicketId(ticketId);
       if (ticket.length != 0) {
         const message = "Operación exitosa Lista de empleados";
@@ -75,11 +75,12 @@ class TicketHandler {
       const newTicket = await createTicket(data);
       // Emitir un evento de Socket.io cuando se crea un nuevo ticket
       const users = await getTickets();
-      io.emit("newTicket", users);
+      io.emit("newTicketBilling", users);
       console.log("ticket creado io emitido");
       const message = "Operación exitosa Registro Creado";
       success({ res, data: newTicket, message });
     } catch (error: any) {
+      console.log(error);
       const message = getErrorMessageByCode(error.code);
       failure({ res, message });
     }
@@ -88,12 +89,12 @@ class TicketHandler {
   // Actualizar datos de Ticket (ticketId)
   public async updateTicket(req: Request, res: Response): Promise<void> {
     try {
-      const ticketId = Number(req.params.ticketId);
+      const ticketId = Number(req.params.ticketBillingId);
       const data = req.body;
       const ticket = await updateTicket(ticketId, data);
       // Emitir un evento de Socket.io cuando se actualiza un ticket
       const users = await getTickets();
-      io.emit("updateTicket", users);
+      io.emit("updateTicketBilling", users);
       const message = "Operación exitosa Registro Actualizado";
       success({ res, data: ticket, message });
     } catch (error: any) {
@@ -105,7 +106,7 @@ class TicketHandler {
   // Actualizar foto de tickets
   public async updatePhotoTicket(req: Request, res: Response): Promise<void> {
     try {
-      const ticketId = Number(req.params.ticketId);
+      const ticketId = Number(req.params.ticketBillingId);
       // Esperar a que la imagen se cargue antes de continuar
       await new Promise<void>((resolve, reject) => {
         uploadImage(req, res, (err) => {
@@ -127,18 +128,19 @@ class TicketHandler {
         const uploadedFilesData = (req.files as Express.Multer.File[]).map(
           (file) => {
             return {
-              ticketId: ticketId,
+              ticketBillingId: ticketId,
               filename: file.filename,
             };
           }
         );
         const ticketPhoto = await createTicketPhoto(uploadedFilesData);
         const users = await getTickets();
-        io.emit("updateTicket", users);
+        io.emit("updateTicketBilling", users);
         const message = "Operación exitosa Registro Actualizado";
         success({ res, data: ticketPhoto, message });
       }
     } catch (error: any) {
+      console.log(error);
       const message = getErrorMessageByCode(error.code);
       failure({ res, message });
     }
@@ -146,10 +148,10 @@ class TicketHandler {
   // Eliminar datos de Ticket (ticketId)
   public async deleteTicket(req: Request, res: Response): Promise<void> {
     try {
-      const ticketId = Number(req.params.ticketId);
+      const ticketId = Number(req.params.ticketBillingId);
       const ticket = await deleteTicket(ticketId);
       const users = await getTickets();
-      io.emit("updateTicket", users);
+      io.emit("updateTicketBilling", users);
       const message = "Operación exitosa Registro Eliminado";
       success({ res, data: ticket, message });
     } catch (error: any) {
