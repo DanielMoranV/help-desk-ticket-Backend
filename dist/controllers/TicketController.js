@@ -17,6 +17,22 @@ const app_1 = require("../app"); // Importa 'io' desde tu archivo 'app.ts'
 // Datos de Categorias
 // --------------------------------
 class TicketHandler {
+    countTicketsStatus(_req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const dataCount = yield (0, TicketRepository_1.countTicketsByStatus)();
+                if (dataCount.length != 0) {
+                    const message = "Operación exitosa Lista de empleados";
+                    (0, response_1.success)({ res, data: dataCount, message });
+                }
+                else {
+                    const message = "Operación exitosa sin registros";
+                    (0, response_1.success)({ res, data: dataCount, message });
+                }
+            }
+            catch (error) { }
+        });
+    }
     // Lista de Tickets
     getTickets(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {

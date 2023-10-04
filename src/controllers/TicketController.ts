@@ -9,6 +9,7 @@ import {
   updateTicket,
   deleteTicket,
   createTicketPhoto,
+  countTicketsByStatus,
 } from "../repository/TicketRepository";
 import { success, failure } from "../utils/response";
 import { io } from "../app"; // Importa 'io' desde tu archivo 'app.ts'
@@ -17,6 +18,18 @@ import { io } from "../app"; // Importa 'io' desde tu archivo 'app.ts'
 // --------------------------------
 
 class TicketHandler {
+  public async countTicketsStatus(_req: Request, res: Response): Promise<void> {
+    try {
+      const dataCount = await countTicketsByStatus();
+      if (dataCount.length != 0) {
+        const message = "Operación exitosa Lista de empleados";
+        success({ res, data: dataCount, message });
+      } else {
+        const message = "Operación exitosa sin registros";
+        success({ res, data: dataCount, message });
+      }
+    } catch (error) {}
+  }
   // Lista de Tickets
   public async getTickets(_req: Request, res: Response): Promise<void> {
     try {

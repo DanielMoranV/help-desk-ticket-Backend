@@ -67,3 +67,38 @@ export function deleteTicket(ticketId: number): Promise<Ticket> {
     },
   });
 }
+
+export async function countTicketsByStatus(): Promise<{
+  [key: string]: number;
+}> {
+  const estados = ["Pendiente", "Espera", "Resuelto"];
+
+  const counts = await prisma.instance.ticket.groupBy({
+    by: ["status"],
+    _count: {
+      _all: true,
+    },
+    where: {
+      status: {
+        in: estados,
+      },
+    },
+  });
+
+  // Crear un objeto con los resultados
+  const countsObject: { [key: string]: number } = {};
+  let total = 0;
+
+  for (const count of counts) {
+    const estado = count.status || "Desconocido"; // Si no hay estado, usar 'Desconocido'
+    const recuento = count._count?._all || 0; // Modificar la referencia al recuento
+
+    countsObject[estado] = recuento;
+    total += recuento;
+  }
+
+  // Agregar el total al objeto
+  countsObject["Total"] = total;
+
+  return countsObject;
+}

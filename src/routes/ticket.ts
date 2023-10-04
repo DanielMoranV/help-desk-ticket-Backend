@@ -8,6 +8,7 @@ const router = Router();
 
 // Routes tickets
 router.post("/", ticketHandler.createTicket);
+router.get("/countStatus", ticketHandler.countTicketsStatus);
 router.get("/", ticketHandler.getTickets);
 router.get("/user/:userId", ticketHandler.getTicketUserId);
 router.get("/:ticketId", ticketHandler.getTicketId);

@@ -9,6 +9,7 @@ const ticketHandler = new TicketController_1.default();
 const router = (0, express_1.Router)();
 // Routes tickets
 router.post("/", ticketHandler.createTicket);
+router.get("/countStatus", ticketHandler.countTicketsStatus);
 router.get("/", ticketHandler.getTickets);
 router.get("/user/:userId", ticketHandler.getTicketUserId);
 router.get("/:ticketId", ticketHandler.getTicketId);
