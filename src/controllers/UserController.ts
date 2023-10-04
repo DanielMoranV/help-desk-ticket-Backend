@@ -61,7 +61,6 @@ class UserHandler {
           createAt: new Date(),
           roleId: 4,
         };
-        console.log(accesPatients);
         await createAccessUser(accesPatients);
       }
 

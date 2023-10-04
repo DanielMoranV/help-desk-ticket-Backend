@@ -69,7 +69,6 @@ class UserHandler {
                         createAt: new Date(),
                         roleId: 4,
                     };
-                    console.log(accesPatients);
                     yield (0, AccessRepository_1.createAccessUser)(accesPatients);
                 }
                 const message = "Operación exitosa Registro Creado";

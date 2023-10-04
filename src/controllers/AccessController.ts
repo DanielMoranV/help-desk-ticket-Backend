@@ -31,7 +31,6 @@ class AccesHandler {
           ...data,
         };
         let newAccessUser = await createAccessUser(data);
-        console.log(newAccessUser);
         const message = "Operación exitosa Registro Acceso Creado";
         success({ res, data: newAccessUser, message });
       } else {

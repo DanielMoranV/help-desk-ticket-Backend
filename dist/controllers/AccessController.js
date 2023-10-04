@@ -30,7 +30,6 @@ class AccesHandler {
                 if (user) {
                     data = Object.assign({ username, userId: user.userId }, data);
                     let newAccessUser = yield (0, AccessRepository_1.createAccessUser)(data);
-                    console.log(newAccessUser);
                     const message = "Operación exitosa Registro Acceso Creado";
                     (0, response_1.success)({ res, data: newAccessUser, message });
                 }
