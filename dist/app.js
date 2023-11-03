@@ -26,7 +26,7 @@ app.use(express_1.default.json());
 // Configurar CORS
 const corsOptions = {
     origin: cli_origin,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"], // Encabezados permitidos
 };
 app.use((0, cors_1.default)(corsOptions));

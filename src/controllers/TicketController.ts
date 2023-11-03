@@ -49,7 +49,6 @@ class TicketHandler {
   public async getTicketUserId(req: Request, res: Response): Promise<void> {
     try {
       const userId = Number(req.params.userId);
-      console.log(userId);
       const users = await getTicketUserId(userId);
 
       if (users.length != 0) {

@@ -21,7 +21,11 @@ function getUsers() {
                 userId: "asc",
             },
             include: {
-                access: true,
+                access: {
+                    include: {
+                        position: true,
+                    },
+                },
             },
         });
     });
@@ -40,6 +44,7 @@ function userBydni(dni) {
 exports.userBydni = userBydni;
 function createUser(data) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(data);
         const newUser = yield prisma_1.default.instance.user.create({ data });
         return newUser;
     });

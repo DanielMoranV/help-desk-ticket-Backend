@@ -57,7 +57,6 @@ class TicketHandler {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const userId = Number(req.params.userId);
-                console.log(userId);
                 const users = yield (0, TicketRepository_1.getTicketUserId)(userId);
                 if (users.length != 0) {
                     const message = "Operación exitosa Lista de empleados";

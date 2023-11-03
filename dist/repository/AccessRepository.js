@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePasswordByUsername = exports.updateAccess = exports.updateTemporalCode = exports.logout = exports.updateLastSession = exports.createAccessUser = exports.getAccess = exports.accessBydni = void 0;
+exports.updatePasswordByUsername = exports.updateAccess = exports.updateTemporalCode = exports.logout = exports.deleteSessions = exports.updateLastSession = exports.createAccessUser = exports.getAccess = exports.accessBydni = void 0;
 const prisma_1 = __importDefault(require("../connection/prisma"));
 function accessBydni(username) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -32,6 +32,10 @@ function getAccess() {
             orderBy: {
                 userId: "asc",
             },
+            include: {
+                user: true,
+                position: true,
+            },
         });
     });
 }
@@ -43,6 +47,14 @@ function createAccessUser(data) {
     });
 }
 exports.createAccessUser = createAccessUser;
+// export async function addUser(data: any): Promise<any> {
+//   const { user, ...access } = data;
+//   const newAccessUser = await prisma.instance.access.create({
+//     data: {
+//     },
+//   });
+//   return newAccessUser;
+// }
 function updateLastSession(username) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield prisma_1.default.instance.access.updateMany({
@@ -55,6 +67,18 @@ function updateLastSession(username) {
     });
 }
 exports.updateLastSession = updateLastSession;
+function deleteSessions(username) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield prisma_1.default.instance.access.update({
+            where: { username },
+            data: {
+                lastSession: new Date(),
+                status: "offline",
+            },
+        });
+    });
+}
+exports.deleteSessions = deleteSessions;
 function logout(username) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield prisma_1.default.instance.access.updateMany({
@@ -79,7 +103,7 @@ function updateTemporalCode(dni, temporalCode) {
 exports.updateTemporalCode = updateTemporalCode;
 function updateAccess(username, data) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield prisma_1.default.instance.access.updateMany({
+        return yield prisma_1.default.instance.access.update({
             where: { username },
             data,
         });

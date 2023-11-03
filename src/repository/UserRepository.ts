@@ -7,7 +7,11 @@ export async function getUsers(): Promise<User[]> {
       userId: "asc",
     },
     include: {
-      access: true,
+      access: {
+        include: {
+          position: true,
+        },
+      },
     },
   });
 }
@@ -22,6 +26,7 @@ export async function userBydni(dni: string): Promise<User | null> {
 }
 
 export async function createUser(data: User): Promise<User> {
+  console.log(data);
   const newUser = await prisma.instance.user.create({ data });
   return newUser;
 }

@@ -6,6 +6,7 @@ import access from "./access";
 import category from "./category";
 import priority from "./priority";
 import ticket from "./ticket";
+import role from "./role";
 import ticketBilling from "./ticketBilling";
 import imageRoutesBilling from "./imageBillingRoutes";
 import imageRoutes from "./imageRoutes";
@@ -23,6 +24,9 @@ export async function useRouter(app: Express, api_url: string) {
   router.use("/category", verifyToken, category);
   // Prioridades
   router.use("/priority", verifyToken, priority);
+
+  //Roles
+  router.use("/role", verifyToken, role);
 
   // Tickets
   router.use("/tickets", verifyToken, ticket);

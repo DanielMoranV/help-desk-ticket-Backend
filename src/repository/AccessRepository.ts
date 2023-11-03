@@ -16,6 +16,10 @@ export async function getAccess(): Promise<Access[]> {
     orderBy: {
       userId: "asc",
     },
+    include: {
+      user: true,
+      position: true,
+    },
   });
 }
 
@@ -23,6 +27,15 @@ export async function createAccessUser(data: any): Promise<any> {
   const newAccessUser = await prisma.instance.access.create({ data });
   return newAccessUser;
 }
+// export async function addUser(data: any): Promise<any> {
+//   const { user, ...access } = data;
+//   const newAccessUser = await prisma.instance.access.create({
+//     data: {
+
+//     },
+//   });
+//   return newAccessUser;
+// }
 
 export async function updateLastSession(username: string): Promise<any> {
   return await prisma.instance.access.updateMany({
@@ -30,6 +43,15 @@ export async function updateLastSession(username: string): Promise<any> {
     data: {
       lastSession: new Date(),
       status: "online",
+    },
+  });
+}
+export async function deleteSessions(username: string): Promise<any> {
+  return await prisma.instance.access.update({
+    where: { username },
+    data: {
+      lastSession: new Date(),
+      status: "offline",
     },
   });
 }
@@ -58,7 +80,7 @@ export async function updateAccess(
   username: string,
   data: Access
 ): Promise<any> {
-  return await prisma.instance.access.updateMany({
+  return await prisma.instance.access.update({
     where: { username },
     data,
   });

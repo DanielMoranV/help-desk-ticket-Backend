@@ -9,6 +9,7 @@ const router = Router();
 // Routes users
 router.post("/:username", accesHandler.createAccessUser);
 router.post("/", accesHandler.loginUser);
+router.patch("/", accesHandler.logoutUser);
 router.get("/", verifyToken, accesHandler.getAccess);
 router.get("/:username", verifyToken, accesHandler.getAccessUser);
 router.put("/:username", verifyToken, accesHandler.updateAccess);

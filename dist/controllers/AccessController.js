@@ -44,6 +44,20 @@ class AccesHandler {
             }
         });
     }
+    // public async addUser(req: Request, res: Response): Promise<void> {
+    //   try {
+    //     let data = req.body;
+    //     data.password = await hashPassword(req.body.password);
+    //     data.createAt = new Date();
+    //     let newAccessUser = await addUser(data);
+    //     const message = "Operación exitosa Registro Acceso Creado";
+    //     success({ res, data: newAccessUser, message });
+    //   } catch (error: any) {
+    //     console.log(error);
+    //     const message = getErrorMessageByCode(error.code);
+    //     failure({ res, message });
+    //   }
+    // }
     // Login de empleado
     loginUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -71,6 +85,21 @@ class AccesHandler {
             }
         });
     }
+    logoutUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { username } = req.body;
+                const userLoggedOut = yield (0, AccessRepository_1.deleteSessions)(username);
+                const message = "Sesión cerrada correctamente";
+                (0, response_1.success)({ res, data: userLoggedOut, message });
+            }
+            catch (error) {
+                console.log(error);
+                const message = (0, errormessagebycode_1.getErrorMessageByCode)(error.code);
+                (0, response_1.failure)({ res, message });
+            }
+        });
+    }
     // Lista de datos de acceso empleados
     getAccess(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -86,6 +115,7 @@ class AccesHandler {
                 }
             }
             catch (error) {
+                console.log(error);
                 const message = (0, errormessagebycode_1.getErrorMessageByCode)(error.code);
                 (0, response_1.failure)({ res, message });
             }

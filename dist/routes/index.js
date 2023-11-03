@@ -20,6 +20,7 @@ const access_1 = __importDefault(require("./access"));
 const category_1 = __importDefault(require("./category"));
 const priority_1 = __importDefault(require("./priority"));
 const ticket_1 = __importDefault(require("./ticket"));
+const role_1 = __importDefault(require("./role"));
 const ticketBilling_1 = __importDefault(require("./ticketBilling"));
 const imageBillingRoutes_1 = __importDefault(require("./imageBillingRoutes"));
 const imageRoutes_1 = __importDefault(require("./imageRoutes"));
@@ -35,6 +36,8 @@ function useRouter(app, api_url) {
         router.use("/category", verifyToken_1.default, category_1.default);
         // Prioridades
         router.use("/priority", verifyToken_1.default, priority_1.default);
+        //Roles
+        router.use("/role", verifyToken_1.default, role_1.default);
         // Tickets
         router.use("/tickets", verifyToken_1.default, ticket_1.default);
         // TicketsBilling

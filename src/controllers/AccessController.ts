@@ -8,6 +8,7 @@ import {
   getAccess,
   updateAccess,
   updatePasswordByUsername,
+  deleteSessions,
 } from "../repository/AccessRepository";
 import { userBydni } from "../repository/UserRepository";
 import { hashPassword, comparePassword } from "../utils/strings";
@@ -42,6 +43,20 @@ class AccesHandler {
       failure({ res, message });
     }
   }
+  // public async addUser(req: Request, res: Response): Promise<void> {
+  //   try {
+  //     let data = req.body;
+  //     data.password = await hashPassword(req.body.password);
+  //     data.createAt = new Date();
+  //     let newAccessUser = await addUser(data);
+  //     const message = "Operación exitosa Registro Acceso Creado";
+  //     success({ res, data: newAccessUser, message });
+  //   } catch (error: any) {
+  //     console.log(error);
+  //     const message = getErrorMessageByCode(error.code);
+  //     failure({ res, message });
+  //   }
+  // }
   // Login de empleado
   public async loginUser(req: Request, res: Response): Promise<void> {
     try {
@@ -67,6 +82,19 @@ class AccesHandler {
     }
   }
 
+  public async logoutUser(req: Request, res: Response): Promise<void> {
+    try {
+      const { username } = req.body;
+      const userLoggedOut = await deleteSessions(username);
+      const message = "Sesión cerrada correctamente";
+      success({ res, data: userLoggedOut, message });
+    } catch (error: any) {
+      console.log(error);
+      const message = getErrorMessageByCode(error.code);
+      failure({ res, message });
+    }
+  }
+
   // Lista de datos de acceso empleados
   public async getAccess(req: Request, res: Response): Promise<void> {
     try {
@@ -79,6 +107,7 @@ class AccesHandler {
         success({ res, data: access, message });
       }
     } catch (error: any) {
+      console.log(error);
       const message = getErrorMessageByCode(error.code);
       failure({ res, message });
     }
