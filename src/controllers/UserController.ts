@@ -96,6 +96,7 @@ class UserHandler {
     try {
       const dni = req.params.dni;
       const data = req.body;
+      data.access.update.data.password = await hashPassword(data.access.update.data.password);
       const user = await updateUser(dni, data);
       const message = "Operación exitosa Registro Actualizado";
       success({ res, data: user, message });

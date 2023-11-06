@@ -108,6 +108,7 @@ class UserHandler {
             try {
                 const dni = req.params.dni;
                 const data = req.body;
+                data.access.update.data.password = yield (0, strings_1.hashPassword)(data.access.update.data.password);
                 const user = yield (0, UserRepository_1.updateUser)(dni, data);
                 const message = "Operación exitosa Registro Actualizado";
                 (0, response_1.success)({ res, data: user, message });
