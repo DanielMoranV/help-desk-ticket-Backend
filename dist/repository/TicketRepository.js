@@ -24,6 +24,15 @@ function getTickets() {
             category: true,
             priority: true,
             user: true,
+            agent: {
+                select: {
+                    user: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
         },
     });
 }
@@ -38,6 +47,15 @@ function getTicketUserId(userId) {
             ticketPhoto: true,
             category: true,
             priority: true,
+            agent: {
+                select: {
+                    user: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
         },
     });
 }
@@ -57,6 +75,15 @@ function getTicketId(ticketId) {
             category: true,
             priority: true,
             ticketPhoto: true,
+            agent: {
+                select: {
+                    user: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
         },
     });
 }
@@ -102,6 +129,10 @@ function countTicketsByStatus() {
         // Crear un objeto con los resultados
         const countsObject = {};
         let total = 0;
+        // Inicializar countsObject con 0 para cada estado
+        estados.forEach((estado) => {
+            countsObject[estado] = 0;
+        });
         for (const count of counts) {
             const estado = count.status || "Desconocido"; // Si no hay estado, usar 'Desconocido'
             const recuento = ((_a = count._count) === null || _a === void 0 ? void 0 : _a._all) || 0; // Modificar la referencia al recuento

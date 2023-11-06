@@ -13,7 +13,6 @@ import {
 } from "../repository/TicketBillingRepository";
 import { success, failure } from "../utils/response";
 import { io } from "../app"; // Importa 'io' desde tu archivo 'app.ts'
-import { promises } from "dns";
 
 // Datos de Categorias
 // --------------------------------

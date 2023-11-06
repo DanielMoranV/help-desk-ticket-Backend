@@ -24,6 +24,15 @@ function getTickets() {
             categoryBilling: true,
             priority: true,
             user: true,
+            agent: {
+                select: {
+                    user: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
         },
     });
 }
@@ -38,6 +47,15 @@ function getTicketUserId(userId) {
             TicketPhotoBilling: true,
             categoryBilling: true,
             priority: true,
+            agent: {
+                select: {
+                    user: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
         },
     });
 }
@@ -57,6 +75,15 @@ function getTicketId(ticketBillingId) {
             categoryBilling: true,
             priority: true,
             TicketPhotoBilling: true,
+            agent: {
+                select: {
+                    user: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
         },
     });
 }

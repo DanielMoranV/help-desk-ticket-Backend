@@ -11,6 +11,15 @@ export function getTickets(): Promise<Ticket[]> {
       category: true,
       priority: true,
       user: true,
+      agent: {
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 }
@@ -24,6 +33,15 @@ export function getTicketUserId(userId: number): Promise<Ticket[]> {
       ticketPhoto: true,
       category: true,
       priority: true,
+      agent: {
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 }
@@ -42,6 +60,15 @@ export function getTicketId(ticketId: number): Promise<Ticket[]> {
       category: true,
       priority: true,
       ticketPhoto: true,
+      agent: {
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 }
@@ -88,6 +115,11 @@ export async function countTicketsByStatus(): Promise<{
   // Crear un objeto con los resultados
   const countsObject: { [key: string]: number } = {};
   let total = 0;
+
+  // Inicializar countsObject con 0 para cada estado
+  estados.forEach((estado) => {
+    countsObject[estado] = 0;
+  });
 
   for (const count of counts) {
     const estado = count.status || "Desconocido"; // Si no hay estado, usar 'Desconocido'

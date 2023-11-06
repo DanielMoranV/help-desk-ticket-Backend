@@ -10,6 +10,15 @@ export function getTickets(): Promise<TicketBilling[]> {
       categoryBilling: true,
       priority: true,
       user: true,
+      agent: {
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 }
@@ -23,6 +32,15 @@ export function getTicketUserId(userId: number): Promise<TicketBilling[]> {
       TicketPhotoBilling: true,
       categoryBilling: true,
       priority: true,
+      agent: {
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 }
@@ -41,6 +59,15 @@ export function getTicketId(ticketBillingId: number): Promise<TicketBilling[]> {
       categoryBilling: true,
       priority: true,
       TicketPhotoBilling: true,
+      agent: {
+        select: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 }
