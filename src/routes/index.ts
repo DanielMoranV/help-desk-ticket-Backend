@@ -10,6 +10,7 @@ import role from "./role";
 import ticketBilling from "./ticketBilling";
 import imageRoutesBilling from "./imageBillingRoutes";
 import imageRoutes from "./imageRoutes";
+import utilidades from "./utilidades";
 
 export async function useRouter(app: Express, api_url: string) {
   //version 1
@@ -39,6 +40,9 @@ export async function useRouter(app: Express, api_url: string) {
 
   // Fotos Tickets
   router.use("/photosBilling", imageRoutesBilling);
+
+  //APICSR
+  router.use("/utilidades", utilidades);
 
   app.use(api_url, router);
 }

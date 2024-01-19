@@ -24,6 +24,7 @@ const role_1 = __importDefault(require("./role"));
 const ticketBilling_1 = __importDefault(require("./ticketBilling"));
 const imageBillingRoutes_1 = __importDefault(require("./imageBillingRoutes"));
 const imageRoutes_1 = __importDefault(require("./imageRoutes"));
+const utilidades_1 = __importDefault(require("./utilidades"));
 function useRouter(app, api_url) {
     return __awaiter(this, void 0, void 0, function* () {
         //version 1
@@ -46,6 +47,8 @@ function useRouter(app, api_url) {
         router.use("/photos", imageRoutes_1.default);
         // Fotos Tickets
         router.use("/photosBilling", imageBillingRoutes_1.default);
+        //APICSR
+        router.use("/utilidades", utilidades_1.default);
         app.use(api_url, router);
     });
 }
